@@ -9,7 +9,7 @@ import './css/styles.css';
 const request = (method, url, data, headers, el, cb) => {
   let req = new XMLHttpRequest();
   req.open(method, url, true);
-
+  req.withCredentials = true;
   Object.keys(headers).forEach(key => {
     req.setRequestHeader(key, headers[key]);
   });
