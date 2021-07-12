@@ -72,7 +72,7 @@ export const disableSubmit = status => {
 export const finishUpload = (element, endpoint, bucket, objectKey) => {
   const link = element.querySelector('.file-link');
   const url = element.querySelector('.file-url');
-  url.value = endpoint + '/' + bucket + '/' + objectKey;
+  url.value = endpoint + '/' + objectKey;
   link.setAttribute('href', url.value);
   link.innerHTML = parseNameFromUrl(url.value)
     .split('/')
@@ -150,6 +150,7 @@ export const generateCustomAuthMethod = (element, signingUrl, dest) => {
 };
 
 export const initiateUpload = (element, signingUrl, uploadParameters, file, dest) => {
+  console.log("signingUrlsigningUrl", signingUrl)
   const createConfig = {
     customAuthMethod: generateCustomAuthMethod(element, signingUrl, dest),
     aws_key: uploadParameters.access_key_id,
