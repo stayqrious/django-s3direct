@@ -229,9 +229,10 @@ const initiateUpload = (element, signingUrl, uploadParameters, file, dest) => {
   });
 };
 
-const checkFileAndInitiateUpload = event => {
+const checkFileAndInitiateUpload = (event, toUploadFile = null) => {
   const element = event.target.parentElement;
-  const file = element.querySelector('.file-input').files[0];
+  let file = element.querySelector('.file-input').files[0];
+  if(!file) file = toUploadFile;
   const dest = element.querySelector('.file-dest').value;
   const destCheckUrl = element.getAttribute('data-policy-url');
   const signerUrl = element.getAttribute('data-signing-url');
