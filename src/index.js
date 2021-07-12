@@ -6,7 +6,7 @@ import SparkMD5 from 'spark-md5';
 import './css/bootstrap-progress.css';
 import './css/styles.css';
 
-const request = (method, url, data, headers, el, cb) => {
+export const request = (method, url, data, headers, el, cb) => {
   let req = new XMLHttpRequest();
   req.open(method, url, true);
   req.withCredentials = true;
@@ -26,7 +26,7 @@ const request = (method, url, data, headers, el, cb) => {
   req.send(data);
 };
 
-const parseNameFromUrl = url => {
+export const parseNameFromUrl = url => {
   return decodeURIComponent((url + '').replace(/\+/g, '%20'));
 };
 
@@ -53,7 +53,7 @@ const error = (el, msg) => {
 
 let concurrentUploads = 0;
 
-const disableSubmit = status => {
+export const disableSubmit = status => {
   const submitRow = document.querySelector('.submit-row');
   if (!submitRow) return;
 
@@ -69,7 +69,7 @@ const disableSubmit = status => {
   });
 };
 
-const finishUpload = (element, endpoint, bucket, objectKey) => {
+export const finishUpload = (element, endpoint, bucket, objectKey) => {
   const link = element.querySelector('.file-link');
   const url = element.querySelector('.file-url');
   url.value = endpoint + '/' + bucket + '/' + objectKey;
@@ -82,11 +82,11 @@ const finishUpload = (element, endpoint, bucket, objectKey) => {
   disableSubmit(false);
 };
 
-const computeMd5 = data => {
+export const computeMd5 = data => {
   return btoa(SparkMD5.ArrayBuffer.hash(data, true));
 };
 
-const computeSha256 = data => {
+export const computeSha256 = data => {
   return createHash('sha256')
     .update(data, 'utf-8')
     .digest('hex');
@@ -99,7 +99,7 @@ export const getCsrfToken = element => {
   return token;
 };
 
-const generateAmzInitHeaders = (acl, serverSideEncryption, sessionToken) => {
+export const generateAmzInitHeaders = (acl, serverSideEncryption, sessionToken) => {
   const headers = {};
   if (acl) headers['x-amz-acl'] = acl;
   if (sessionToken) headers['x-amz-security-token'] = sessionToken;
@@ -109,13 +109,13 @@ const generateAmzInitHeaders = (acl, serverSideEncryption, sessionToken) => {
   return headers;
 };
 
-const generateAmzCommonHeaders = sessionToken => {
+export const generateAmzCommonHeaders = sessionToken => {
   const headers = {};
   if (sessionToken) headers['x-amz-security-token'] = sessionToken;
   return headers;
 };
 
-const generateCustomAuthMethod = (element, signingUrl, dest) => {
+export const generateCustomAuthMethod = (element, signingUrl, dest) => {
   const getAwsV4Signature = (
     _signParams,
     _signHeaders,
@@ -265,7 +265,7 @@ export const checkFileAndInitiateUpload = (event, toUploadFile = null) => {
   });
 };
 
-const removeUpload = e => {
+export const removeUpload = e => {
   e.preventDefault();
   const el = e.target.parentElement;
   el.querySelector('.file-url').value = '';
@@ -273,7 +273,7 @@ const removeUpload = e => {
   el.className = 's3direct form-active';
 };
 
-const addHandlers = el => {
+export const addHandlers = el => {
   const url = el.querySelector('.file-url');
   const input = el.querySelector('.file-input');
   const remove = el.querySelector('.file-remove');
