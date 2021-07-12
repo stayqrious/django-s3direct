@@ -170,7 +170,6 @@ export const initiateUpload = (element, signingUrl, uploadParameters, file, dest
     file: file,
     contentType: file.type,
     xAmzHeadersCommon: generateAmzCommonHeaders(uploadParameters.session_token),
-    AccessControlAllowOrigin: "*",
     xAmzHeadersAtInitiate: generateAmzInitHeaders(
       uploadParameters.acl,
       uploadParameters.server_side_encryption,
@@ -218,7 +217,7 @@ export const initiateUpload = (element, signingUrl, uploadParameters, file, dest
         finishUpload(
           element,
           uploadParameters.endpoint,
-          uploadParameters.bucket,
+          // uploadParameters.bucket,
           s3Objkey
         );
       },
