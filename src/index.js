@@ -30,7 +30,7 @@ const parseNameFromUrl = url => {
   return decodeURIComponent((url + '').replace(/\+/g, '%20'));
 };
 
-const parseJson = json => {
+export const parseJson = json => {
   let data;
   try {
     data = JSON.parse(json);
@@ -92,7 +92,7 @@ const computeSha256 = data => {
     .digest('hex');
 };
 
-const getCsrfToken = element => {
+export const getCsrfToken = element => {
   const cookieInput = element.querySelector('.csrf-cookie-name');
   const input = document.querySelector('input[name=csrfmiddlewaretoken]');
   const token = input ? input.value : Cookies.get(cookieInput.value);
@@ -149,7 +149,7 @@ const generateCustomAuthMethod = (element, signingUrl, dest) => {
   return getAwsV4Signature;
 };
 
-const initiateUpload = (element, signingUrl, uploadParameters, file, dest) => {
+export const initiateUpload = (element, signingUrl, uploadParameters, file, dest) => {
   const createConfig = {
     customAuthMethod: generateCustomAuthMethod(element, signingUrl, dest),
     aws_key: uploadParameters.access_key_id,
@@ -229,7 +229,7 @@ const initiateUpload = (element, signingUrl, uploadParameters, file, dest) => {
   });
 };
 
-const checkFileAndInitiateUpload = (event, toUploadFile = null) => {
+export const checkFileAndInitiateUpload = (event, toUploadFile = null) => {
   const element = event.target.parentElement;
   let file = null;
   if (toUploadFile) {
