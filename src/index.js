@@ -6,7 +6,7 @@ import SparkMD5 from 'spark-md5';
 import './css/bootstrap-progress.css';
 import './css/styles.css';
 
-const request = (method, url, data, headers, el, cb) => {
+export const request = (method, url, data, headers, el, cb) => {
   let req = new XMLHttpRequest();
   req.open(method, url, true);
   req.withCredentials = true;
@@ -26,11 +26,11 @@ const request = (method, url, data, headers, el, cb) => {
   req.send(data);
 };
 
-const parseNameFromUrl = url => {
+export const parseNameFromUrl = url => {
   return decodeURIComponent((url + '').replace(/\+/g, '%20'));
 };
 
-const parseJson = json => {
+export const parseJson = json => {
   let data;
   try {
     data = JSON.parse(json);
@@ -53,7 +53,7 @@ const error = (el, msg) => {
 
 let concurrentUploads = 0;
 
-const disableSubmit = status => {
+export const disableSubmit = status => {
   const submitRow = document.querySelector('.submit-row');
   if (!submitRow) return;
 
@@ -69,10 +69,10 @@ const disableSubmit = status => {
   });
 };
 
-const finishUpload = (element, endpoint, bucket, objectKey) => {
+export const finishUpload = (element, endpoint, bucket, objectKey) => {
   const link = element.querySelector('.file-link');
   const url = element.querySelector('.file-url');
-  url.value = endpoint + '/' + bucket + '/' + objectKey;
+  url.value = endpoint + '/' + objectKey;
   link.setAttribute('href', url.value);
   link.innerHTML = parseNameFromUrl(url.value)
     .split('/')
@@ -82,24 +82,24 @@ const finishUpload = (element, endpoint, bucket, objectKey) => {
   disableSubmit(false);
 };
 
-const computeMd5 = data => {
+export const computeMd5 = data => {
   return btoa(SparkMD5.ArrayBuffer.hash(data, true));
 };
 
-const computeSha256 = data => {
+export const computeSha256 = data => {
   return createHash('sha256')
     .update(data, 'utf-8')
     .digest('hex');
 };
 
-const getCsrfToken = element => {
+export const getCsrfToken = element => {
   const cookieInput = element.querySelector('.csrf-cookie-name');
   const input = document.querySelector('input[name=csrfmiddlewaretoken]');
   const token = input ? input.value : Cookies.get(cookieInput.value);
   return token;
 };
 
-const generateAmzInitHeaders = (acl, serverSideEncryption, sessionToken) => {
+export const generateAmzInitHeaders = (acl, serverSideEncryption, sessionToken) => {
   const headers = {};
   if (acl) headers['x-amz-acl'] = acl;
   if (sessionToken) headers['x-amz-security-token'] = sessionToken;
@@ -109,13 +109,13 @@ const generateAmzInitHeaders = (acl, serverSideEncryption, sessionToken) => {
   return headers;
 };
 
-const generateAmzCommonHeaders = sessionToken => {
+export const generateAmzCommonHeaders = sessionToken => {
   const headers = {};
   if (sessionToken) headers['x-amz-security-token'] = sessionToken;
   return headers;
 };
 
-const generateCustomAuthMethod = (element, signingUrl, dest) => {
+export const generateCustomAuthMethod = (element, signingUrl, dest) => {
   const getAwsV4Signature = (
     _signParams,
     _signHeaders,
@@ -149,7 +149,8 @@ const generateCustomAuthMethod = (element, signingUrl, dest) => {
   return getAwsV4Signature;
 };
 
-const initiateUpload = (element, signingUrl, uploadParameters, file, dest) => {
+export const initiateUpload = (element, signingUrl, uploadParameters, file, dest) => {
+  console.log("signingUrlsigningUrl", signingUrl)
   const createConfig = {
     customAuthMethod: generateCustomAuthMethod(element, signingUrl, dest),
     aws_key: uploadParameters.access_key_id,
@@ -229,9 +230,14 @@ const initiateUpload = (element, signingUrl, uploadParameters, file, dest) => {
   });
 };
 
-const checkFileAndInitiateUpload = event => {
+export const checkFileAndInitiateUpload = (event, toUploadFile = null) => {
   const element = event.target.parentElement;
-  const file = element.querySelector('.file-input').files[0];
+  let file = null;
+  if (toUploadFile) {
+    file = toUploadFile;
+  } else {
+    file = element.querySelector('.file-input').files[0];
+  }
   const dest = element.querySelector('.file-dest').value;
   const destCheckUrl = element.getAttribute('data-policy-url');
   const signerUrl = element.getAttribute('data-signing-url');
@@ -260,7 +266,7 @@ const checkFileAndInitiateUpload = event => {
   });
 };
 
-const removeUpload = e => {
+export const removeUpload = e => {
   e.preventDefault();
   const el = e.target.parentElement;
   el.querySelector('.file-url').value = '';
@@ -268,7 +274,7 @@ const removeUpload = e => {
   el.className = 's3direct form-active';
 };
 
-const addHandlers = el => {
+export const addHandlers = el => {
   const url = el.querySelector('.file-url');
   const input = el.querySelector('.file-input');
   const remove = el.querySelector('.file-remove');
