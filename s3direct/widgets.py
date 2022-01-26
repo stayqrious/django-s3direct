@@ -5,7 +5,7 @@ from django.forms import widgets
 from django.utils.safestring import mark_safe
 from django.urls import reverse
 from django.template.loader import render_to_string
-from django.utils.http import urlunquote_plus
+from urllib.parse import unquote_plus as urlunquote_plus
 from django.conf import settings
 
 
