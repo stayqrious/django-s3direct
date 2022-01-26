@@ -1,4 +1,4 @@
-from django.conf.urls import re_path
+from django.urls import re_path
 from s3direct.views import get_upload_params, generate_aws_v4_signature
 
 urlpatterns = [
